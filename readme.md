@@ -24,7 +24,18 @@ crimecity --> 프로젝트 폴더
 * 웹
 
 pip3 install Django
-pip3 install django-bootstrap4
+<!-- pip3 install django-bootstrap4 -->
+
+* 부트스트랩 (웹 템플릿)
+  https://startbootstrap.com/
+
+* 어썸폰트 (폰트)
+  https://fontawesome.com/
+
+* 언스플래시 소스 (사진)
+  https://source.unsplash.com/
+  
+
 
 * 데이터 가공
 

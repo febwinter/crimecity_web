@@ -8,6 +8,13 @@
       <script src="{% static 'bootstrap/js/jquery.slim.min.js' %}"></script>
       <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
       <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+      <style>
+        form {
+          display: block;
+          max-width: 526px;
+          max-height: 285px;
+        }
+      </style>
       <title>LogIn Page</title>
   </head>
   <body>
@@ -18,16 +25,19 @@
           <div class="col-md-8 col-lg-6">
             <div class="login d-flex align-items-center py-5">
               <div class="container">
+                
                 <div class="row">
-                  <div class="col-md-9 col-lg-8 mx-auto">
+                  <div class="col-md-9 col-lg-8 mx-auto" id="width-modify">
                     <h3 class="login-heading mb-4">Welcome to CrimeCity</h3>
-                    <form>
+                    <form method="POST">
+                      {% csrf_token %}
                       <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <input name="user_email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
                         <label for="inputEmail">Email address</label>
-                      </div>      
+                      </div>    
+
                       <div class="form-label-group">
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <input name="user_pw" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                         <label for="inputPassword">Password</label>
                       </div>
       
@@ -37,9 +47,10 @@
                       </div>
                       <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Sign in</button>
                       <div class="text-center">
-                        <a class="small" href="#">Forgot password?</a></div>
+                        <!-- <a class="small" href="#">Forgot password?</a></div> -->
                     </form>
                   </div>
+                
                 </div>
               </div>
             </div>

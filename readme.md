@@ -4,7 +4,7 @@ crimecity --> 프로젝트 폴더
 
 1. mainPage --> 로그인
    - 로그인 페이지부터 접속되도록 세팅 (초기 접속 설정 및 나머지 페이지 권한 설정)
-   - 
+   - 로그인 이후 메인 페이지 접속
 
 2. mapNnews --> 지도/뉴스
   
@@ -24,9 +24,13 @@ crimecity --> 프로젝트 폴더
 
 <설치 파이선 패키지(pip3)>
 
+* 개발
+
+pip3 install pylint-django
+
 * 웹
 
-pip3 install Django
+pip3 install Django (필)
 <!-- pip3 install django-bootstrap4 -->
 
 * 부트스트랩 (웹 템플릿)

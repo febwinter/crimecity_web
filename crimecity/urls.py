@@ -22,4 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('mainPage.urls', 'mainPage'), name='mainPage'),
     path('main/', include('innerMain.urls', 'innerMain'), name='innerMain'),
+    path('mapNews/', include('mapNnews.urls', 'mapNnews'), name='mapNnews'),
+    path('dataGraph/', include('dataGraph.urls', 'dataGraph'), name='dataGraph'),
+    path('prediction/', include('prediction.urls', 'prediction'), name='prediction'),
 ]

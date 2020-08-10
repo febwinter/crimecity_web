@@ -19,8 +19,7 @@ class loginView(View):
     #             name = info.user_name
     #             # request.session.[]
     #             msg = True
-        
-        
+
     #     if msg == True:
     #         msg = 'Hello {} Login Success!'.format(name)
     #         context = {
@@ -34,6 +33,3 @@ class loginView(View):
     #         }
     #         return render(request, 'mainPage/login.html', context)
 
-
-
-        

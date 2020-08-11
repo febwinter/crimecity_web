@@ -31,7 +31,7 @@
               <div class="row">
                 <div class="col-md-9 col-lg-8 mx-auto" id="width-modify">
                   <h3 class="login-heading mb-4">Welcome to CrimeCity</h3>
-                  <form method="POST" class="post-form" action="{% url 'mainPage:login' %}">
+                  <form method="POST" class="post-form" action="{% url 'login:login' %}">
                     {% csrf_token %}
                     <div class="form-label-group">
                         <input name="username" type="text" id="usr" class="form-control" 
@@ -46,10 +46,10 @@
                       <label for="inputPassword">Password</label>
                     </div>
 
-                    <div class="custom-control custom-checkbox mb-3">
+                    {% comment %} <div class="custom-control custom-checkbox mb-3">
                       <input type="checkbox" class="custom-control-input" id="customCheck1">
                       <label class="custom-control-label" for="customCheck1">Remember password</label>
-                    </div>
+                    </div> {% endcomment %}
 
                     {% if form.errors %}
                     {% for field in form %}
@@ -70,11 +70,12 @@
                     {% endif %}
 
                     <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
-                      type="submit">Sign in</button>
+                      type="submit">Sign In</button>
                     <!-- <div class="text-center"> Forgot password? </div> -->
                   </form>
+                  <a href="{% url 'login:register' %}"><button class="btn btn-lg btn-info btn-block btn-login text-uppercase font-weight-bold mb-2"
+                      type="link">Sign Up</button></a>
                 </div>
-
               </div>
             </div>
           </div>

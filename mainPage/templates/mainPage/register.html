@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'mainPage/css/style.css' %}">
+    <script src="{% static 'bootstrap/js/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <style>
+        form {
+            display: block;
+            max-width: 526px;
+            max-height: 285px;
+        }
+    </style>
+    <title>Registration</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row no-gutter">
+                <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+                <div class="col-md-8 col-lg-6">
+                    <div class="login d-flex align-items-center py-5">
+                        <div class="container">
+
+                            <div class="row">
+                                <div class="col-md-9 col-lg-8 mx-auto" id="width-modify">
+                                    <h3 class="login-heading mb-4">Registration</h3>
+                                    <form method="POST" class="post-form" action="{% url 'login:register' %}">
+                                        {% csrf_token %}
+                                        
+                                        <div class="form-label-group">
+                                            <input name="username" type="text" id="usr" class="form-control"
+                                                placeholder="Username"
+                                                value="{{ form.username.value|default_if_none:'' }}" required autofocus>
+                                            <label for="usr">Username</label>
+                                        </div>
+
+                                        <div class="form-label-group">
+                                            <input name="password" type="password" id="inputPassword"
+                                                class="form-control" placeholder="Password"
+                                                value="{{ form.password.value|default_if_none:'' }}" required>
+                                            <label for="inputPassword">Password</label>
+                                        </div>
+
+                                        <div class="form-label-group">
+                                            <input name="password" type="password" id="inputPassword"
+                                                class="form-control" placeholder="Password"
+                                                value="{{ form.password.value|default_if_none:'' }}" required>
+                                            <label for="inputPassword">Retype Password</label>
+                                        </div>
+
+                                        {% comment %} <div class="custom-control custom-checkbox mb-3">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                            <label class="custom-control-label" for="customCheck1">Remember
+                                                password</label>
+                                        </div> {% endcomment %}
+
+                                        {% if form.errors %}
+                                        {% for field in form %}
+                                        {% for error in field.errors %}
+                                        <!-- 필드 오류를 출력한다. -->
+                                        <div class="alert alert-danger">
+                                            <strong>{{ field.label }}</strong>
+                                            {{ error }}
+                                        </div>
+                                        {% endfor %}
+                                        {% endfor %}
+                                        {% for error in form.non_field_errors %}
+                                        <!-- 넌필드 오류를 출력한다. -->
+                                        <div class="alert alert-danger">
+                                            <strong>{{ error }}</strong>
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+
+                                        <button
+                                            class="btn btn-lg btn-info btn-block btn-login text-uppercase font-weight-bold mb-2"
+                                            type="submit">Register</button>
+                                        <!-- <div class="text-center"> Forgot password? </div> -->
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

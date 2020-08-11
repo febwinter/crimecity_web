@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import View
-from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def mainView(request):
-    return render(request, 'innerMain/main.html')
+    return render(request, 'innerMain/main.html', request.get_username())
 
 
 # class mainView(View):

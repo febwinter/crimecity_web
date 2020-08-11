@@ -131,5 +131,8 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_REDIRECT_URL = '/main'
+LOGOUT_REDIRECT_URL = '/mainpage/login'
+
+LOGIN_URL = '/mainpage/login'
 
 ALLOWED_HOSTS = ['*']

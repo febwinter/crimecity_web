@@ -15,15 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from innerMain import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', include('mainPage.urls', 'mainPage'), name='mainPage'),
-    path('main/', include('innerMain.urls', 'innerMain'), name='innerMain'),
+    path('login/', include('mainPage.urls', 'login'), name='login'),
+    path('main/', include('innerMain.urls', 'main'), name='main'),
     path('mapNews/', include('mapNnews.urls', 'mapNnews'), name='mapNnews'),
     path('dataGraph/', include('dataGraph.urls', 'dataGraph'), name='dataGraph'),
     path('prediction/', include('prediction.urls', 'prediction'), name='prediction'),
-    
+
 ]

@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'mainPage',
     'innerMain',
-    'mapNnews',
-    'dataGraph',
-    'prediction',
 ]
 
 MIDDLEWARE = [

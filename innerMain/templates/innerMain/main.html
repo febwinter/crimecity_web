@@ -68,8 +68,8 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             {% if user.is_authenticated %}
-                            <a class="dropdown-item" href="#">{% user.get_username %}</a>
-                            <a class="dropdown-item" href="{% url innerMain:logout %}">Logout</a>
+                            <a class="dropdown-item" href="#">UserName</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                             {% else %}
                             <a class="dropdown-item" href='#'>Logout</a>
                             {% endif %}

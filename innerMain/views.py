@@ -1,11 +1,17 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 
 # Create your views here.
 
-class mainview(View):
+class mainview(LoginRequiredMixin, View):
 
-    @login_required
+    login_url = '/login'
+    redirect_field_name = 'redirect to'
+
     def get(self, request):
-        return render(request, 'innerMain/main.html')
+        # print(request.user.username)
+        context = {
+            'user' : request.user.username
+        }
+        return render(request, 'innerMain/main.html', context)

@@ -24,7 +24,7 @@
 ## 설치 파이선 패키지(pip3)
 
 - 개발
-
+  - pip3 install django
   - pip3 install pylint-django
 
 - 웹
@@ -46,6 +46,10 @@
 
   - pip3 install Pandas
   - pip3 install Numpy
+
+- 지도
+
+  - pip3 install folium
 
 ---
 

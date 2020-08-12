@@ -64,15 +64,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Account
+                                {{ user }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            {% if user.is_authenticated %}
-                            <a class="dropdown-item" href="#">UserName</a>
+                            <a class="dropdown-item" href="#">Account Setting</a>
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                            {% else %}
-                            <a class="dropdown-item" href='#'>Logout</a>
-                            {% endif %}
 
                             </div>
                         </li>

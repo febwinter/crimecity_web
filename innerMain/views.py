@@ -10,8 +10,21 @@ class mainview(LoginRequiredMixin, View):
     redirect_field_name = 'redirect to'
 
     def get(self, request):
-        # print(request.user.username)
         context = {
             'user' : request.user.username
         }
-        return render(request, 'innerMain/main.html', context)
+        return render(request, 'innerMain/welcome_search.html', context)
+
+    def post(self,request):
+        context = {
+            'user' : request.user.username
+        }
+        return render(request, 'innerMain/search_result.html', context)
+
+
+# Test for Django HTML
+class testView(View):
+
+    def get(self, request):
+        return render(request, 'innerMain/sample.html')
+

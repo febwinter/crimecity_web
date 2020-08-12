@@ -51,6 +51,9 @@
 
   - pip3 install folium
 
+- 크롤링
+  
+  - pip3 install requests
 ---
 
 ## 명령어 주의

@@ -4,9 +4,9 @@
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
  */
 
- #wrapper {
+#wrapper {
     overflow-x: hidden;
- }
+}
 
 #sidebar-wrapper {
   min-height: 100vh;
@@ -15,11 +15,13 @@
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
+  
 }
 
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
   font-size: 1.2rem;
+  
 }
 
 #sidebar-wrapper .list-group {
@@ -37,6 +39,8 @@
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;
+    
+    
   }
 
   #page-content-wrapper {
@@ -46,5 +50,6 @@
 
   #wrapper.toggled #sidebar-wrapper {
     margin-left: -15rem;
+    
   }
 }

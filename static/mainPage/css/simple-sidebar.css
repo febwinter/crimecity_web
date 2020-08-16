@@ -15,7 +15,8 @@
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
-  
+  position: fixed;
+  z-index: 1; 
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -38,9 +39,7 @@
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
-    margin-left: 0;
-    
-    
+    margin-left: -15rem;
   }
 
   #page-content-wrapper {
@@ -49,7 +48,7 @@
   }
 
   #wrapper.toggled #sidebar-wrapper {
-    margin-left: -15rem;
+    margin-left: 0rem;
     
   }
 }

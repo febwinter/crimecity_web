@@ -37,7 +37,8 @@
             <br><br><br>
             <div class="sidebar-heading">Crime City</div>
             <div class="list-group list-group-flush">
-                <a href="{% url 'main:main' %}" class="list-group-item list-group-item-action bg-light">Search Crimes</a>
+                <a href="{% url 'main:main' %}" class="list-group-item list-group-item-action bg-light">Search
+                    Crimes</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Crime & CCTV map</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Charts</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Police Patrol Route</a>
@@ -91,10 +92,11 @@
                             <br>
                         </div>
                         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                            <form method="POST" class="post-form" action="{% url 'main' %}">
+                            <form method="POST" class="post-form" action="{% url 'main:main' %}">
+                                {% csrf_token %}
                                 <div class="form-row">
                                     <div class="col-12 col-md-9 mb-2 mb-md-0">
-                                        <input type="text" class="form-control form-control-lg">
+                                        <input type="text" name="search" id="search" class="form-control form-control-lg" value="{{ form.username.value|default_if_none:'범죄' }}" placeholder="Search" required autofocus>
                                     </div>
                                     <div class="col-12 col-md-3">
                                         <button type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
@@ -195,7 +197,7 @@
                 <!-- /.row -->
 
                 <!-- Pagination -->
-                <ul class="pagination justify-content-center">
+                {% comment %} <ul class="pagination justify-content-center">
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
@@ -217,7 +219,7 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </li>
-                </ul>
+                </ul> {% endcomment %}
                 <!--Search Result End-->
             </div>
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
+from .models import NewsData
 
 import requests
 from bs4 import BeautifulSoup
@@ -36,14 +37,15 @@ class mainview(LoginRequiredMixin, View):
 ###############################################################################################
 
     def post(self, request):
-        keyword = request.POST
-        print(keyword)
-        url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page={0}&q={1}'.format(1, keyword)
-        news_link = self.get_link(url)
+        keyword = request.POST.get('search')
         title_list = []
         link_list = []
         img_list = []
         to_check = []
+        text_list = []
+
+        url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page={0}&q={1}'.format(1, keyword)
+        news_link = self.get_link(url)
 
         # title, link
         for contents in news_link:
@@ -55,26 +57,37 @@ class mainview(LoginRequiredMixin, View):
         html = requests.get(url).text.strip() 
         soup = BeautifulSoup(html, 'html5lib')
         photos = soup.select("div.wrap_thumb div a img[src]")
+        texts = soup.select("li > div.wrap_cont > div > p")
 
         for i in photos:
             img = i["src"]
+            print(len(img))
             img_list.append(img)
 
-        
+        for i in texts:
+            text = i.get_text()
+            text_list.append(text)
 
         for i in range(10):
-            img =soup.select("#news_img_{0} > div > a > img[src]".format(i))
+            img = soup.select("#news_img_{0} > div > a > img[src]".format(i))
             to_check.append(img)
 
         for i, check in enumerate(to_check):
             if len(check) == 0:
-                img_list.insert(i, "img_default")
-        
+                img_list.insert(i, "https://images.unsplash.com/photo-1560575193-c2c9e886aefe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80")
 
+        item_num = len(title_list)
+        item_list = []
+        for i in range(item_num):
+            item_list.append(NewsData(title_list[i], img_list[i],text_list[i], link_list[i])) # title, image, summary, link
+
+        
         context = {
             'user' : request.user.username,
             'default' : False,
-            'keyword' : keyword
+            'keyword' : keyword,
+            'items' : item_list,
+            'length' : item_num
 
         }
         return render(request, 'innerMain/welcome_search.html', context)
@@ -113,12 +126,10 @@ class testView(View):
             info_list.append(title.get_text())
 
         link_data = dict(zip(title_data, link_list)) # 제목  : 링크
-        paper_data = dict(zip(title_data, info_list)) # 제목 : 신문사
         context = {
             'title' : title_data,
             'link' : link_list,
             'paper' : info_list,
             'linkData' : link_data
         }
-        print(title_data)
         return render(request, 'innerMain/sample.html', context)

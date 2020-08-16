@@ -15,9 +15,12 @@ class mainview(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {
-            'user' : request.user.username
+            'user': request.user.username,
+            'default': True,
         }
         return render(request, 'innerMain/welcome_search.html', context)
+
+###############################################################################################
 
     def get_link(self, p_url):
         html = requests.get(p_url).text.strip() # 요청의 결과(응답, response - HTML)를 저장
@@ -30,10 +33,12 @@ class mainview(LoginRequiredMixin, View):
         r_news_link = soup.select('.coll_cont ul li a.f_link_b')
         return r_news_link
 
-    def post(self,request):
-        
-        
-        url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page={0}&q={1}'.format(num, keyword)
+###############################################################################################
+
+    def post(self, request):
+        keyword = request.POST
+        print(keyword)
+        url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page={0}&q={1}'.format(1, keyword)
         news_link = self.get_link(url)
         title_list = []
         link_list = []
@@ -53,8 +58,6 @@ class mainview(LoginRequiredMixin, View):
 
         for i in photos:
             img = i["src"]
-            # print(img)
-            # print("===============================")
             img_list.append(img)
 
         
@@ -66,15 +69,15 @@ class mainview(LoginRequiredMixin, View):
         for i, check in enumerate(to_check):
             if len(check) == 0:
                 img_list.insert(i, "img_default")
+        
 
-        for i in range(len(title_list)):
-            print("제목 : ",title_list[i])
-            print("링크 : ",link_list[i])
-            print("이미지src : ",img_list[i])
         context = {
-            'user' : request.user.username
+            'user' : request.user.username,
+            'default' : False,
+            'keyword' : keyword
+
         }
-        return render(request, 'innerMain/search_result.html', context)
+        return render(request, 'innerMain/welcome_search.html', context)
 
 
 
@@ -119,24 +122,3 @@ class testView(View):
         }
         print(title_data)
         return render(request, 'innerMain/sample.html', context)
-        # data = {
-        #     'title' : title_list,
-        #     'info' : info_list,
-        #     'link' : link_list
-        # }
-        # # print(data)
-        # df = pd.DataFrame(data, columns=["title", "info", "link"])
-        # news_data = df
-        # news_show_data = news_data[["title", "info", "link"]]
-        # news_show_data
-
-        # news_html = news_show_data.to_html(index=False, justify='center')
-        # # print(news_html)
-
-        # """## link는 a로 넣고, table은 2개로만"""
-
-        # news_data[["link"]]
-
-
-
-        return render(request, 'innerMain/sample.html')

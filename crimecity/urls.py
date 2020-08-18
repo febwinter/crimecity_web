@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('mainPage.urls', 'login'), name='login'),
     path('main/', include('innerMain.urls', 'main'), name='main'),
-    path('logout/', LogoutView.as_view(),name='logout')
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('map/', include('mapPage.urls', 'map'), name='map')
 
 ]

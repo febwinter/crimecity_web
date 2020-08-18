@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from .models import NewsData
-
 import requests
 from bs4 import BeautifulSoup
 

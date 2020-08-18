@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'mainPage',
     'innerMain',
     'mapPage',
+    'chartPage',
 ]
 
 MIDDLEWARE = [

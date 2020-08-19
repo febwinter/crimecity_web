@@ -69,8 +69,8 @@
 - 본 프로젝트는 python3 기준으로 작성되었음
 - 리눅스, macOS 기준(python3가 기본이 아닌 시스템 기준) python3 명령어로 구동시켜아 함
 
-python3 manage.py collectstatic
-python3 manage.py makemigration
-python3 manage.py migrate
-python3 manage.py runserver 8000
-python3 manage.py runserver [ip]:[port]
+- python3 manage.py collectstatic
+- python3 manage.py makemigration
+- python3 manage.py migrate
+- python3 manage.py runserver 8000
+- python3 manage.py runserver [ip]:[port]

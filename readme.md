@@ -58,9 +58,19 @@
   - pip3 install html5lib
 ---
 
+## 데이터 주의사항
+
+- csv 인코딩 주의 :  euc-kr을 utf-8로 바꾸어야 함
+
 ## 명령어 주의
 
 - pip update, pip3 update <-- "절대" 하지 말것
 - 윈도우 python 명령어 버전 확인 (2인지 3인지)
 - 본 프로젝트는 python3 기준으로 작성되었음
 - 리눅스, macOS 기준(python3가 기본이 아닌 시스템 기준) python3 명령어로 구동시켜아 함
+
+python3 manage.py collectstatic
+python3 manage.py makemigration
+python3 manage.py migrate
+python3 manage.py runserver 8000
+python3 manage.py runserver [ip]:[port]

@@ -20,8 +20,7 @@ class mapview(LoginRequiredMixin, View):
     redirect_field_name = 'redirect to'
 
     def get(self, request):
-        Public_Map = 0
-        self.passMap()
+        Public_Map = self.passMap()
         context = {
             'user': request.user.username,
             'default': True,
@@ -76,10 +75,99 @@ class mapview(LoginRequiredMixin, View):
             print("Error Code:" + rescode)
 
     def passMap(self):
-        static_crime_path = staticfiles_storage.url('csv/crime.csv')
-        static_cctv_path = staticfiles_storage.url('csv/cctv.csv')
+        static_crime_path = staticfiles_storage.path('mapPage/csv/crime.csv')
+        static_cctv_path = staticfiles_storage.path('mapPage/csv/cctv.csv')
         a = pd.read_csv(static_crime_path, thousands=',', encoding='euc-kr')
         b = pd.read_csv(static_cctv_path, thousands=',', encoding='euc-kr')
         a.head()
         b.head()
-        print(static_cctv_path," : ", static_crime_path)
+        
+        #csv에서 지역을 받아 리스트로 넣어줌
+        region = []
+        for value in a:
+            region.append(value)
+        #
+        del region[0:1]
+        #print(region)
+
+        x = [] #네이버 api에서 받은 위도
+        y = [] #네이버 api에서 받은 경도
+        z = [] #네이버 api에서 받은 지역이름
+        cc = [] #cctv 위도
+        tv = [] #cctv 경도
+
+        #naver map api info
+        for value in region:
+            temp_map = self.search_map(value)
+            temp_map = json.loads(temp_map)
+            temp_map = temp_map['addresses'][0]
+            x.append(float(temp_map['x']))
+            y.append(float(temp_map['y']))
+            z.append(temp_map['roadAddress'])
+
+        # print(x) 
+        m = folium .Map(
+            location=(37.4729081, 127.039306),
+            tiles='cartodbpositron',
+            zoom_start=8
+        )
+
+        #정보 부분 출력
+        fg_1 = folium.FeatureGroup(name='CCTV Location').add_to(m)
+        fg_2 = folium.FeatureGroup(name='Crime List').add_to(m) 
+
+        #지역별 범죄현황
+        #               16개
+        for i in range(len(x)):
+            classes = ('table table-striped table-hover' 'taalbe-condensed table-responsive')
+
+            popup = a.iloc[[0, 1, 2, 3, 4, 5, 6, 7], [0, i+1]].to_html(classes=classes)
+
+            folium.Marker(
+                [y[i],x[i]],
+                popup=popup,
+                icon=folium.Icon(color='blue')
+            ).add_to(fg_1)
+
+        #cctv append
+        for i in range(373):
+            cc.append(b.iloc[i, 2]) #위도
+            tv.append(b.iloc[i, 3]) #경도
+
+
+        radi = 30 #반경
+        rotating_degree = 5 #회전각도 5개
+        ar = 0 #비율, 교차하지 않은 경우의 값
+        r = 50 #장소의 원의 반지름
+        R = 10 #유저의 원의 반지름
+
+        #cctv input
+        for i in range(373):
+            # c = 각 cctv의 좌표
+            c = cc[i],tv[i] #36.94273371 / 126.780918
+            #사용자 입력 주소 (위,경도 변환된값)
+            R2_p = (37.459485, 126.905046)
+            d = self.distance(c, R2_p)
+            #d = math.floor(d)
+            # for i in range(int(d)):
+            #     if i < 10:
+            #         print(i) 
+
+            offsets = self.calc_offsets(radi, c[1])
+            coordinates = [self.coordinate_after_rotation(c, e, offsets) for e in range(0, 360+1, rotating_degree)]
+            # b = 각 cctv의 폴리곤화
+            b = []
+            for i in coordinates:
+                b.append(i)
+
+            folium.Marker(
+                c,
+                icon = folium.Icon(color='red'), #icon='C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/images.png'
+                popup = c
+            ).add_to(fg_2)
+            # 각 cctv의 폴리곤 원형화
+            folium.Polygon(locations=b, fill=True, color='red', tooltip='Polygon').add_to(fg_2)
+
+        folium.LayerControl(collapsed=False).add_to(m)
+        m = m._repr_html_()
+        return m

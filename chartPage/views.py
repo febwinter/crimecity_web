@@ -16,3 +16,5 @@ class chartview(LoginRequiredMixin, View):
             'default': True,
         }
         return render(request, 'chartPage/chart.html', context)
+    
+    

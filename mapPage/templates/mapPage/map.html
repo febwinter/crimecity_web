@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-
+    <title>Crime City - Map</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Crime City - Map</title>
+    
 
     {% load static %}
     <!-- Bootstrap core CSS -->
@@ -98,12 +98,15 @@
 
             <div class="col-xl-9 mx-auto">
             <h1 class="my-4">Crime & CCTV Map</h1>
-                {{ map|safe }}
+                <div>
+                    {{ map|safe }}
+                </div>
             </div>
 
             <!-- Map End -->
             <!--Search Result End-->
             <!-- /#page-content-wrapper -->
+            <br><br>
             <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
                 <div class="container text-center">
                     <small>Copyright &copy; Crime City</small>

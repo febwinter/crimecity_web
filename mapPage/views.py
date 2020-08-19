@@ -77,10 +77,13 @@ class mapview(LoginRequiredMixin, View):
     def passMap(self):
         static_crime_path = staticfiles_storage.path('mapPage/csv/crime.csv')
         static_cctv_path = staticfiles_storage.path('mapPage/csv/cctv.csv')
-        a = pd.read_csv(static_crime_path, thousands=',', encoding='euc-kr')
-        b = pd.read_csv(static_cctv_path, thousands=',', encoding='euc-kr')
+        # static_police_path = staticfiles_storage.path('mapPage/csv/police.csv')
+        a = pd.read_csv(static_crime_path, thousands=',', encoding='utf-8')
+        b = pd.read_csv(static_cctv_path, thousands=',', encoding='utf-8')
+        # police = pd.read_csv('static_police_path', thousands=',',encoding='utf-8') 
         a.head()
         b.head()
+        # police.head()
         
         #csv에서 지역을 받아 리스트로 넣어줌
         region = []
@@ -169,5 +172,6 @@ class mapview(LoginRequiredMixin, View):
             folium.Polygon(locations=b, fill=True, color='red', tooltip='Polygon').add_to(fg_2)
 
         folium.LayerControl(collapsed=False).add_to(m)
-        m = m._repr_html_()
+        # m = m.get_root()._repr_html_()
+        m = m.get_root()._repr_html_()
         return m

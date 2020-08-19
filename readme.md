@@ -50,6 +50,8 @@
 - 지도
 
   - pip3 install folium
+  - pip3 install gpxpy
+  - pip3 install geojson
 
 - 크롤링
   

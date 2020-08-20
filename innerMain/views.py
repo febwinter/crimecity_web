@@ -109,7 +109,7 @@ class testView(View):
         soup = BeautifulSoup(r.text, 'html.parser')
         news_titles = soup.select('.news .type01 li dt a[title]')
         news_links = soup.select('.news .type01 li dt a[href]')
-        news_info = soup.findAll("span",{"class":"_sp_each_source"})
+        news_info = soup.findAll("span", {"class":"_sp_each_source"})
 
         title_data = []
         for title in news_titles:

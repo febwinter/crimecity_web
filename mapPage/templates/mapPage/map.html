@@ -90,18 +90,37 @@
                             <br>
                             <br>
                         </div>
+                        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                            <form method="POST" class="post-form" action="{% url 'map:map' %}">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col-12 col-md-9 mb-2 mb-md-0">
+                                        <input type="text" name="search" id="search"
+                                            class="form-control form-control-lg"
+                                            value="{{ form.keyword.value}}" placeholder="Search"
+                                            required autofocus>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <button type="submit" class="btn btn-block btn-lg btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </header>
 
             <!-- Map -->
-
+            {% if default == true %}
+            {% else %}
             <div class="col-xl-9 mx-auto">
-            <h1 class="my-4">Crime & CCTV Map</h1>
+                <h1 class="my-4">Crime & CCTV Map</h1>
                 <div>
                     {{ map|safe }}
                 </div>
             </div>
+            {% endif %}
+
 
             <!-- Map End -->
             <!--Search Result End-->

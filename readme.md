@@ -24,7 +24,7 @@
 ## 설치 파이선 패키지(pip3)
 
 - 개발
-  - pip3 install django
+  - pip3 install django(vserion = 3.1)
   - pip3 install pylint-django
 
 - 웹

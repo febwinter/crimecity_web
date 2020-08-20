@@ -26,7 +26,7 @@ SECRET_KEY = 'd_*gticibigokepte%chwv#l*y_ca1t_($u_#06d)g&a5867+c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -133,4 +133,4 @@ LOGOUT_REDIRECT_URL = '/login'
 
 LOGIN_URL = '/login'
 
-ALLOWED_HOSTS = ['*']
+

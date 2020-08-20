@@ -13,14 +13,3 @@ class NewsData():
         self.image = image
         self.summary = summary
         self.link = link
-
-
-    # class Meta:
-    #     verbose_name = "NewsData"
-    #     verbose_name_plural = "NewsDatas"
-
-    # def __str__(self):
-    #     return self.title
-
-    # def get_absolute_url(self):
-    #     return reverse("NewsData_detail", kwargs={"pk": self.pk})

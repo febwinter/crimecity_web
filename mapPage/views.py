@@ -11,6 +11,7 @@ import folium
 import folium.plugins
 import math
 import ssl
+import gpxpy
 # Create your views here.
 
 # Welcome and Search Page
@@ -45,14 +46,15 @@ class mapview(LoginRequiredMixin, View):
         t2 = 2 * math.acos((pow(d, 2) + pow(r, 2) - pow(R, 2)) / (2 * d * r))
         return (pow(R, 2) * (t1 - math.sin(t1)) + pow(r, 2) * (t2 - math.sin(t2))) / 2
 
-    def distance(self, R1, R2):
+    def distance(R1, R2):
         #R1 = 136.9122221, 35.1299227
         #R2 = 136.9116187, 35.1295955
         lat1 = R1[0] 
         lon1 = R1[1]
         lat2 = R2[0]
         lon2 = R2[1]
-        return 110.25 * math.sqrt(pow(lat1 - lat2, 2) + pow((lon1 - lon2) * math.cos(math.radians(lat2)), 2))
+        #return 110.25 * math.sqrt(pow(lat1 - lat2, 2) + pow((lon1 - lon2) * math.cos(math.radians(lat2)), 2))
+        return gpxpy.geo.haversine_distance(lat1, lon1, lat2, lon2)/1000
 
     #naver maps api return module
     def search_map(self, search_text):
@@ -77,13 +79,13 @@ class mapview(LoginRequiredMixin, View):
     def passMap(self):
         static_crime_path = staticfiles_storage.path('mapPage/csv/crime.csv')
         static_cctv_path = staticfiles_storage.path('mapPage/csv/cctv.csv')
-        # static_police_path = staticfiles_storage.path('mapPage/csv/police.csv')
+        static_police_path = staticfiles_storage.path('mapPage/csv/police.csv')
         a = pd.read_csv(static_crime_path, thousands=',', encoding='utf-8')
         b = pd.read_csv(static_cctv_path, thousands=',', encoding='utf-8')
-        # police = pd.read_csv('static_police_path', thousands=',',encoding='utf-8') 
+        police = pd.read_csv('static_police_path', thousands=',',encoding='utf-8') 
         a.head()
         b.head()
-        # police.head()
+        police.head()
         
         #csv에서 지역을 받아 리스트로 넣어줌
         region = []
@@ -98,6 +100,8 @@ class mapview(LoginRequiredMixin, View):
         z = [] #네이버 api에서 받은 지역이름
         cc = [] #cctv 위도
         tv = [] #cctv 경도
+        lst = []
+        lst2 = []
 
         #naver map api info
         for value in region:
@@ -110,14 +114,16 @@ class mapview(LoginRequiredMixin, View):
 
         # print(x) 
         m = folium .Map(
-            location=(37.4729081, 127.039306),
+            location=(37.450428, 126.905858),
             tiles='cartodbpositron',
-            zoom_start=8
+            zoom_start=16
         )
 
         #정보 부분 출력
         fg_1 = folium.FeatureGroup(name='CCTV Location').add_to(m)
         fg_2 = folium.FeatureGroup(name='Crime List').add_to(m) 
+        fg_3 = folium.FeatureGroup(name='markers_3').add_to(m) 
+        fg_4 = folium.FeatureGroup(name='markers_4').add_to(m) 
 
         #지역별 범죄현황
         #               16개
@@ -139,39 +145,139 @@ class mapview(LoginRequiredMixin, View):
 
 
         radi = 30 #반경
-        rotating_degree = 5 #회전각도 5개
+        radi_user = 15 #유저반경
+        rotating_degree = 45 #회전각도 5개
         ar = 0 #비율, 교차하지 않은 경우의 값
         r = 50 #장소의 원의 반지름
-        R = 10 #유저의 원의 반지름
+        R = 30 #유저의 원의 반지름
+
+        #사용자 입력값
+        temp_user = self.search_map("서울특별시 서초구 양재2동 242-14")
+        temp_user = json.loads(temp_user)
+        temp_user = temp_user['addresses'][0]
+        R2_p = (float(temp_user['x']),float(temp_user['y']))
+        print(R2_p)
+
 
         #cctv input
         for i in range(373):
             # c = 각 cctv의 좌표
             c = cc[i],tv[i] #36.94273371 / 126.780918
-            #사용자 입력 주소 (위,경도 변환된값)
-            R2_p = (37.459485, 126.905046)
-            d = self.distance(c, R2_p)
-            #d = math.floor(d)
-            # for i in range(int(d)):
-            #     if i < 10:
-            #         print(i) 
-
-            offsets = self.calc_offsets(radi, c[1])
-            coordinates = [self.coordinate_after_rotation(c, e, offsets) for e in range(0, 360+1, rotating_degree)]
+            d = distance(c, (R2_p))
+            d = d * 100
+            tmp_array = [cc[i], tv[i], d]
+            lst.append(tmp_array)
+            offsets = calc_offsets(radi, c[1])
+            coordinates = [coordinate_after_rotation(c, e, offsets) for e in range(0, 360+1, rotating_degree)]
             # b = 각 cctv의 폴리곤화
             b = []
             for i in coordinates:
                 b.append(i)
 
+            icon1 = folium.features.CustomIcon('C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/cctv.png', icon_size=(17, 17))
             folium.Marker(
                 c,
-                icon = folium.Icon(color='red'), #icon='C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/images.png'
+                icon = icon1,
                 popup = c
             ).add_to(fg_2)
-            # 각 cctv의 폴리곤 원형화
-            folium.Polygon(locations=b, fill=True, color='red', tooltip='Polygon').add_to(fg_2)
+
+            folium.Circle(
+                location = c,
+                radius = 25,
+                fill = True,
+                color = 'red',
+                tooltip = 'Polygon'
+            ).add_to(fg_2)
+
+        #icon = folium.features.CustomIcon('C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/user.png', icon_size=(15, 15)),
+        folium.Marker(
+            (R2_p),
+            #icon = folium.features.CustomIcon('C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/user.png', icon_size=(15, 15)),
+            popup = (R2_p)
+        ).add_to(fg_2)
+
+        folium.Circle(
+            location = (R2_p),
+            radius = 25,
+            fill = True,
+            popup = (R2_p)
+        ).add_to(fg_2)
+
+        crros_over = min(lst, key=lambda item: item[2])
+
+        print(crros_over)
+        R1_p = (crros_over[0], crros_over[1])
+        pulse = (crros_over[2])
+
+        #현재 위치 기준으로 반경내 이탈한지 체크
+        if pulse < 5 :
+            print("cctv 반경 내에 위치합니다.")
+            #return # a = "cctv 반경 내에 위치합니다."
+        else :
+            print("cctv 반경에서 벗어났습니다.")
+            #return # a = "cctv 반경에서 벗어났습니다."
+        #return # a
+
+        # 첫번째 = cctv안에 유저 전체가 들어감 print(36%) <= 고정값
+        # 세번째 = cctv안에 유저가 일부 들어감 print(1~35%) <= 거리기반값
+        if pulse + R <= r : # 장소의 원안에 유저의 원이 존재할 경우
+            ar = (math.pi * pow(R, 2)) / (math.pi * pow(r, 2)) 
+            print("첫번째") 
+        elif pulse + r <= R : #유저의 원안에 장소의 원이 존재할 경우
+            ar = 1.0
+            print("두번째")
+        elif pulse < R + r : #두 원이 겹쳐지지 않은 경우 + 부분적으로 겹쳐진경우 MAX =36 ,Min = 1 
+            ar = intersection_area(R, r, d) / (math.pi * pow(r, 2))
+            print("세번째")
+        else :
+            print("에러")
+
+
+        police_we = []
+        police_gang = []
+        for i in range(2264):
+            police_we.append(police.iloc[i, 4]) #위도
+            police_gang.append(police.iloc[i, 3]) #경도
+
+        for i in range(2264):
+            police_loc = (police_we[i],police_gang[i])
+            police_d = distance(police_loc, (R2_p))
+            police_d = police_d * 1000
+            police_array = [police_we[i], police_gang[i], police_d]
+            lst2.append(police_array)
+
+            icon2 = folium.features.CustomIcon(
+                'C:/Users/His hacker/Desktop/gitlab/SK-Infosec/tens/police.png', 
+                icon_size=(20, 20)
+                )
+            folium.Marker(
+                police_loc,
+                icon=icon2,
+                popup = police_loc
+            ).add_to(fg_3)
+
+        test = []
+        for i in lst2:
+            if i[2] < 1000:
+                test = (i[0], i[1], i[2])
+                test_lat_lon = i[0:2]
+                print(test_lat_lon)
+                # print(test)
+                locations = [R2_p]
+                data=[]
+                data.append(locations)
+                data.append(test_lat_lon)
+                print(data)
+                popup3 = str(round(i[2])) + 'm'
+                icon3 = folium.plugins.PolyLineOffset(
+                    data,
+                    popup = popup3,
+                    color = "black", 
+                    opacity=1,
+                    offset=-5,
+                    dash_array = "5,10"
+                ).add_to(fg_4)
+
 
         folium.LayerControl(collapsed=False).add_to(m)
-        # m = m.get_root()._repr_html_()
-        m = m.get_root()._repr_html_()
-        return m
+        return m._repr_html_()

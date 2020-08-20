@@ -26,10 +26,15 @@
     <link href="{% static 'innerMain/01welSearch/css/fontGoogle.css' %}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template -->
     <link href="{% static 'chartPage/css/landing-search.min.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    {% comment %}
     <link rel="stylesheet" href="{% static 'chartPage/js/Chart.js' %}">
-    <link rel="stylesheet" href="{% static 'chartPage/js/Chart.bundle.js' %}">
+    <link rel="stylesheet" href="{% static 'chartPage/js/Chart.bundle.js' %}"> {% endcomment %}
 
 </head>
 
@@ -107,37 +112,128 @@
                 <br>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
+                    {% for region in regions %}
+                    {% if region.id == 0  %}
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+                        <a class="nav-link active" data-toggle="tab" href="#chart{{region.id}}">{{ region.name }}</a>
                     </li>
+                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+                        <a class="nav-link" data-toggle="tab" href="#chart{{region.id}}">{{ region.name }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
-                    </li>
+                    {% endif %}
+
+                    {% endfor %}
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div id="home" class="container tab-pane active"><br>
-                        <h3>HOME</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
+                    {% for region in regions %}
+                    {% if region.id == 0 %}
+                    <div id="chart{{region.id}}" class="container tab-pane active">
+                        <div class="container"> <canvas id="myChart-{{region.id}}"></canvas> </div> <!-- 부트스트랩 -->
+                        <script>
+                            var ctx{{region.id}} = document.getElementById('myChart-{{region.id}}');
+                            var myChart = new Chart(ctx{{region.id}}, {
+                                type: 'bar',
+                                data: {
+                                    labels: ['살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생'],
+                                    datasets: [{
+                                        label: '{{ region.name }} 범죄 현황',
+                                        data: {{region.data}},
+                                        backgroundColor: ['rgba(17, 189, 197, 0.2)'],
+                                        borderColor: ['rgba(17, 189, 197, 0.5)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)'
+                                        ],
+                                        borderWidth: 3
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+                        </script>
                     </div>
-                    <div id="menu1" class="container tab-pane fade"><br>
-                        <h3>Menu 1</h3>
-                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat.</p>
+                    {% else %}
+                    <div id="chart{{region.id}}" class="container tab-pane fade">
+                        <div class="container"> <canvas id="myChart-{{region.id}}"></canvas> </div> <!-- 부트스트랩 -->
+                        <script>
+                            var ctx{{region.id}} = document.getElementById('myChart-{{region.id}}');
+                            var myChart = new Chart(ctx{{region.id}}, {
+                                type: 'bar',
+                                data: {
+                                    labels: ['살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생'],
+                                    datasets: [{
+                                        label: '{{ region.name }} 범죄 현황',
+                                        data: {{region.data}},
+                                        backgroundColor: ['rgba(17, 189, 197, 0.2)'],
+                                        borderColor: ['rgba(17, 189, 197, 0.5)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)'
+                                        ],
+                                        borderWidth: 3
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+                        </script>
                     </div>
-                    <div id="menu2" class="container tab-pane fade"><br>
-                        <h3>Menu 2</h3>
-                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                            laudantium, totam rem aperiam.</p>
-                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-
+            <br>
+            <div class="container">
+                <h2>Planning Seoul!</h2>
+                <div class="container row">
+                {% for c_region in circle_data %}
+                    <div class="col-md-6">
+                    <div class="container"> <canvas id="myChart{{c_region.id}}"></canvas> </div>
+                    <script>
+                        var ctx{{c_region.id}} = document.getElementById('myChart{{c_region.id}}');
+                        var myChart = new Chart(ctx{{c_region.id}}, {
+                        type: 'polarArea',
+                        data: {
+                            labels: ['도심권','동남권','동북권','서남권','서북권'],
+                            datasets: [{
+                            label: '{{c_region.name}}',
+                            data: {{c_region.data}},
+                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                            borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: '{{c_region.name}}'
+                            }
+                        }
+                        });
+                    </script>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
             <!-- 시도별 탭 차트 END -->
             <!-- Footer -->
             <footer id="sticky-footer" class="py-4 bg-dark text-white-50">

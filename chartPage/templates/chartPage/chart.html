@@ -13,7 +13,6 @@
     {% load static %}
     <!-- Bootstrap core CSS -->
     <link href="{% static 'mainPage/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'mainPage/vendor/bootstrap/css/bootstrap.bundle.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{% static 'mainPage/css/simple-sidebar.css' %}" rel="stylesheet">
@@ -51,7 +50,8 @@
                 <a href="{% url 'map:map' %}" class="list-group-item list-group-item-action bg-light">Crime & CCTV
                     map</a>
                 <a href="{% url 'chart:chart' %}" class="list-group-item list-group-item-action bg-light">Charts</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Police Patrol Route</a>
+                <a href="{% url 'traffic:traffic' %}" class="list-group-item list-group-item-action bg-light">Insight Police</a>
+                <a href="{% url 'board:board' %}" class="list-group-item list-group-item-action bg-light">Board</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -108,7 +108,7 @@
 
             <!-- 시도별 탭 차트 -->
             <div class="container mt-3">
-                <h2>구별 범죄 차트</h2>
+                <h2>Seoul Crime Data</h2>
                 <br>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
@@ -201,6 +201,8 @@
                     {% endfor %}
                 </div>
             </div>
+            <br>
+            <hr>
             <br>
             <div class="container">
                 <h2>Planning Seoul!</h2>

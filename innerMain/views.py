@@ -20,20 +20,11 @@ class mainview(LoginRequiredMixin, View):
         }
         return render(request, 'innerMain/welcome_search.html', context)
 
-###############################################################################################
-
     def get_link(self, p_url):
-        html = requests.get(p_url).text.strip() # 요청의 결과(응답, response - HTML)를 저장
-        # print(html[0:100]) # 전체 문자열에서 100자만 확인
-
-        # BeautifulSoup 객체를 생성
+        html = requests.get(p_url).text.strip()
         soup = BeautifulSoup(html, 'html5lib')
-
-        # soup.select(css_selector): soup 객체에서 CSS 선택자로 요소들을 찾는 방법
         r_news_link = soup.select('.coll_cont ul li a.f_link_b')
         return r_news_link
-
-###############################################################################################
 
     def post(self, request):
         keyword = request.POST.get('search')
@@ -46,7 +37,6 @@ class mainview(LoginRequiredMixin, View):
         url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page={0}&q={1}'.format(1, keyword)
         news_link = self.get_link(url)
 
-        # title, link
         for contents in news_link:
             link = contents.get('href')
             link_list.append(link)
@@ -97,10 +87,6 @@ class mainview(LoginRequiredMixin, View):
 # Test for Django HTML
 class testView(View):
 
-    # def get(self, request):
-    #     return render(request, 'innerMain/sample.html')
-
-    # def crawling_news(self, request):
     def get(self, request):
         search_keyword = '범죄'
         url = f'https://search.naver.com/search.naver?where=news&sm=tab_jum&query={search_keyword}'
@@ -124,7 +110,7 @@ class testView(View):
         for title in news_info:
             info_list.append(title.get_text())
 
-        link_data = dict(zip(title_data, link_list)) # 제목  : 링크
+        link_data = dict(zip(title_data, link_list))
         context = {
             'title' : title_data,
             'link' : link_list,

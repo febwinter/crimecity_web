@@ -3,12 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from .models import Region_Info
 from django.contrib.staticfiles.storage import staticfiles_storage
-
 import pandas as pd
 
-# Create your views here.
-
-# Welcome and Search Page
 class chartview(LoginRequiredMixin, View):
 
     login_url = '/login'
@@ -29,7 +25,6 @@ class chartview(LoginRequiredMixin, View):
     def get_vis_data(self, path):
         static_chart_data_path = staticfiles_storage.path(path)
         data = pd.read_csv(static_chart_data_path, thousands=',', encoding='utf-8')
-        # label = data.columns.tolist()
         region_object_list = []
         rows = len(data)
         for row in range(rows):
